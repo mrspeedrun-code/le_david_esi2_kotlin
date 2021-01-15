@@ -1,0 +1,2 @@
+include ':app'
+rootProject.name = "mds_dle_kotlin_todo"
