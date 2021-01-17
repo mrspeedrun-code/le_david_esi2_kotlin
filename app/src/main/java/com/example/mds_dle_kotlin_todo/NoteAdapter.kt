@@ -1,15 +1,15 @@
 package com.example.mds_dle_kotlin_todo
 
+import android.system.Os.accept
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.mds_dle_kotlin_todo.models.Note
-import com.example.mds_dle_kotlin_todo.MainActivity.*
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.activity_main.view.*
 import kotlinx.android.synthetic.main.item_list.view.*
+import kotlinx.coroutines.NonCancellable.cancel
 
 
 class NoteAdapter(
@@ -43,6 +43,12 @@ class NoteAdapter(
         notifyDataSetChanged()
     }
 
+    fun updateNote(note: Note, index: Int) {
+        notes.removeAt(index)
+        notes.add(note)
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount(): Int {
         return notes.size
     }
@@ -54,8 +60,23 @@ class NoteAdapter(
             tvNoteTitle.text = curNote.title
             tvNoteText.text = curNote.text
             ibDelete.setOnClickListener() {
-                deleteNote(position)
-                Snackbar.make(it, "La note "+curNote.title+" à été supprimé.", Snackbar.LENGTH_LONG)
+                MaterialAlertDialogBuilder(context)
+                        .setTitle("Confirmation of deletion")
+                        .setMessage("Are you sure ?")
+                        .setNegativeButton("decline") { dialog, which ->
+                        }
+                        .setPositiveButton("accept") { dialog, which ->
+                            deleteNote(position)
+                            Snackbar.make(it, "La note "+curNote.title+" à été supprimé.", Snackbar.LENGTH_LONG)
+                                    .setAction(position.toString()) {
+                                    }
+                                    .show()
+                        }
+                        .show()
+            }
+            ibUpdate.setOnClickListener() {
+                updateNote(curNote, position)
+                Snackbar.make(it, "La note "+curNote.title+" à été mise à jour.", Snackbar.LENGTH_LONG)
                         .setAction(position.toString()) {
                         }
                         .show()
