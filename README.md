@@ -4,11 +4,11 @@ This project consists in the realization of a mobile application with Kotlin.
 ## Step
 * [x] activity_main.xml - constraintLayout, recyclerview
 * [x] item_list.xml - constraintLayout, TextView(title with bold), TextView(note)
-* [] CRUD functionality on notes
+* [x] CRUD functionality on notes
 * [x] Create floatingactionbutton(material UI)
 * [] Data persistence in files
-* [] Deletion confirmation dialog
-* [] NoteDetailActivity
+* [x] Deletion confirmation dialog
+* [x] NoteDetailActivity
 
 
 
