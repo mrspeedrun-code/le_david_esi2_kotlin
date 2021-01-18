@@ -1,6 +1,6 @@
 package com.example.mds_dle_kotlin_todo
 
-import android.system.Os.accept
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,12 +9,15 @@ import com.example.mds_dle_kotlin_todo.models.Note
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_list.view.*
-import kotlinx.coroutines.NonCancellable.cancel
+import java.io.File
 
 
 class NoteAdapter(
         private val notes: MutableList<Note>
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
+
+    private val filepath = "MyFileStorage"
+    internal var myExternalFile: File?=null
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -33,9 +36,11 @@ class NoteAdapter(
         )
     }
 
-    fun addNote(note: Note) {
+    fun addNote(note: Note, context: Context) {
         notes.add(note)
         notifyItemInserted(notes.size - 1)
+
+        //writeNote(context,note)
     }
 
     fun deleteNote(index: Int) {

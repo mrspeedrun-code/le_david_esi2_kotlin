@@ -54,7 +54,7 @@ class NoteListActivity : AppCompatActivity() {
 
         val note = Note(noteTitle.toString(), noteText.toString())
 
-        noteAdapter.addNote(note)
+        noteAdapter.addNote(note, this)
 
 
         //val toast = Toast.makeText(this, data?.getStringExtra("noteText"), Toast.LENGTH_LONG)
