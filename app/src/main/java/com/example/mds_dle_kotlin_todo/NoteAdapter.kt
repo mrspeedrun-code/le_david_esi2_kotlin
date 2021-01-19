@@ -1,6 +1,7 @@
 package com.example.mds_dle_kotlin_todo
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.item_list.view.*
 import java.io.File
+import java.lang.Exception
+import java.security.AccessController.getContext
 
 
 class NoteAdapter(
@@ -18,8 +21,14 @@ class NoteAdapter(
 
     var bufferposition: Int = 0
 
-    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    lateinit var con: Context;
 
+    fun setContext(context: Context): Context{
+        con = context
+        return context
+    }
+
+    class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         fun bind() {
 
         }
@@ -40,12 +49,17 @@ class NoteAdapter(
         notifyItemInserted(notes.size - 1)
 
         bufferposition += 1
-        writeNote(context,note, bufferposition)
+        writeNote(context,notes, bufferposition)
     }
 
     fun deleteNote(index: Int) {
         notes.removeAt(index)
         notifyDataSetChanged()
+
+        try {
+           writeNote(con, notes, index) // rewrite file
+        }catch(ex: Exception) { Log.d("TAG", "bug delete")}
+
     }
 
     fun updateNote(note: Note, index: Int) {

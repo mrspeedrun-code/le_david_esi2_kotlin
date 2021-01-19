@@ -1,47 +1,54 @@
 package com.example.mds_dle_kotlin_todo
 
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import com.example.mds_dle_kotlin_todo.models.Note
 import com.google.android.material.snackbar.Snackbar
-import java.io.FileInputStream
-import java.io.FileOutputStream
-import java.io.ObjectOutputStream
+import java.io.*
+import java.lang.Exception
 
-fun writeNote(context: Context, note: Note, position: Int){
+fun writeNote(context: Context, notes: MutableList<Note>, position: Int){
     Log.d("TAG", "message$position")
+    //val fileBody = note.title + ',' + note.text
+    val fileBody = notes
 
-    val fileOutput = context.openFileOutput("storage.txt",Context.MODE_PRIVATE)
-    val outputStream = ObjectOutputStream(fileOutput)
-    outputStream.writeObject(note.title + note.text)
-    outputStream.close()
-}
+    try {
+        context.openFileOutput("storage.txt",Context.MODE_PRIVATE).use {output ->
+            var rewrite = ""
 
-fun readNote(context: Context) {
-    FileInputStream(context.getFileStreamPath("storage.txt")).use { stream ->
-        val text = stream.bufferedReader().use {
-            it.readText()
+            for (note in notes) {
+                Log.d("TAG",">$note ")
+                rewrite = note.title + ',' + note.text + "\n"
+                output.write (rewrite.toByteArray ())
+            }
         }
-        Log.d("TAG", "LOADED: $text")
+    } catch (ex: Exception) {}
 
-        // transformer en objet note
-        // liste d'objet note
-    }
 }
 
-//var myExternalFile:File = File(getExternalFilesDir(filepath), "storage.txt")
-/*
-try {
-    //val fileOutPutStream = FileOutputStream(myExternalFile)
-    val fileBody = "text"
+fun readNote(context: Context): MutableList<Note> {
+    val lineList = mutableListOf<String>()
+    val reNoteList = mutableListOf<Note>()
+0
+    try {
+        FileInputStream(context.getFileStreamPath("storage.txt")).use { stream ->
+            val reader = stream.bufferedReader()
+            reader.useLines {
+                lines -> lines.forEach {
+                    lineList.add(it)
+                }
+            }
 
-    var fileContext: Context
+            lineList.forEach{
+                val line = it.split(",")
+                val tab = line[0]
+                val tab2 = line[1]
+                val note = Note(tab, tab2)
+                reNoteList.add(note)
+            }
+        }
+    } catch (ex: Exception) {}
 
-    val fileOutPutStream = FileOutputStream(parent.context.openFileOutput("storage.txt", Context.MODE_PRIVATE))
-    fileOutPutStream.write(fileBody.toByteArray())
-    fileOutPutStream.close()
-} catch (e: IOException) {
-    e.printStackTrace()
+    return reNoteList
 }
-
- */
