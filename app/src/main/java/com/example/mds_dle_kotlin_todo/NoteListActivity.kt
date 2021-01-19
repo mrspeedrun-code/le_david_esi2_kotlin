@@ -23,6 +23,8 @@ class NoteListActivity : AppCompatActivity() {
         rvNoteItems.adapter = noteAdapter
         rvNoteItems.layoutManager = LinearLayoutManager(this)
 
+        readNote(this)
+
         fabAddNote.setOnClickListener{
             Intent(this, NoteDetailActivity::class.java).also {
                 //startActivity(it)

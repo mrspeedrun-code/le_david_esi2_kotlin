@@ -16,8 +16,7 @@ class NoteAdapter(
         private val notes: MutableList<Note>
 ) : RecyclerView.Adapter<NoteAdapter.NoteViewHolder>() {
 
-    private val filepath = "MyFileStorage"
-    internal var myExternalFile: File?=null
+    var bufferposition: Int = 0
 
     class NoteViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
@@ -40,7 +39,8 @@ class NoteAdapter(
         notes.add(note)
         notifyItemInserted(notes.size - 1)
 
-        //writeNote(context,note)
+        bufferposition += 1
+        writeNote(context,note, bufferposition)
     }
 
     fun deleteNote(index: Int) {
